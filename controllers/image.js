@@ -24,7 +24,8 @@ class Controller {
                 } else {
                     let newImage = new Image({
                         image: req.body.image,
-                        title: req.body.title
+                        title: req.body.title,
+                        name: req.body.name
                     })
                     return newImage
                                 .save()
@@ -40,11 +41,12 @@ class Controller {
     }
     static searchImage(req, res) {
         Image
-            .find({
-                title: req.body.title
-            })
+            .find({$or: [
+                {name:new RegExp(req.query.search, 'i')},
+                {title: new RegExp(req.query.search, 'i')}
+            ]})
             .then((data) => {
-                //if title is not found . . .
+                //if not found . . .
                 if(data.length === 0) {
                     res.status(400).json({message: "Image with that Title not found"})
                 } else {
