@@ -1,14 +1,14 @@
-const Image = require('../models/image.js') 
+const Image = require('../models/image.js')
 class Controller {
     static getImages(req, res) {
         Image
             .find()
             .then((data) => {
-                res.status(200).json({data: data})
+                res.status(200).json({ data: data })
             })
             .catch((err) => {
                 console.log(err)
-                res.status(500).json({message: err})
+                res.status(500).json({ message: err })
             })
     }
     static addImage(req, res) {
@@ -23,7 +23,7 @@ class Controller {
                 //if data is not found : aka data is null and title is not already used
                 } else {
                     let newImage = new Image({
-                        image: req.body.image,
+                        image: req.file.cloudStoragePublicUrl,
                         title: req.body.title,
                         name: req.body.name
                     })
@@ -41,18 +41,20 @@ class Controller {
     }
     static searchImage(req, res) {
         Image
-            .find({$or: [
-                {name:new RegExp(req.query.search, 'i')},
-                {title: new RegExp(req.query.search, 'i')}
-            ]})
+            .find({
+                $or: [
+                    { name: new RegExp(req.query.search, 'i') },
+                    { title: new RegExp(req.query.search, 'i') }
+                ]
+            })
             .then((data) => {
                 //if not found . . .
-                if(data.length === 0) {
-                    res.status(400).json({message: "Image with that Title not found"})
+                if (data.length === 0) {
+                    res.status(400).json({ message: "Image with that Title not found" })
                 } else {
-                    res.status(200).json({message: "Image Found", data: data})
+                    res.status(200).json({ message: "Image Found", data: data })
                 }
-            })   
+            })
     }
 }
 
