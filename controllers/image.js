@@ -11,16 +11,17 @@ class Controller {
                 res.status(500).json({ message: err })
             })
     }
-    static addImageNael(req, res) {
-        Image  
+    static addPhoto(req, res) {
+        // console.log(req.file)
+        Image
             .find({
                 title: req.body.title
             })
             .then((data) => {
                 //if data is found: AKA title is already used
-                if(data.length !== 0) {
-                    res.status(400).json({message: "Title has already been used"})
-                //if data is not found : aka data is null and title is not already used
+                if (data.length !== 0) {
+                    res.status(400).json({ message: "Title has already been used" })
+                    //if data is not found : aka data is null and title is not already used
                 } else {
                     let newImage = new Image({
                         image: req.file.cloudStoragePublicUrl,
@@ -28,15 +29,43 @@ class Controller {
                         name: req.body.name
                     })
                     return newImage
-                                .save()
-                                .then((data) => {
-                                    res.status(201).json({message:"Image Added", data: data})
-                                })
+                        .save()
+                        .then((data) => {
+                            res.status(201).json({ message: "Image Added", data: data })
+                        })
                 }
             })
             .catch((err) => {
                 console.log(err)
-                res.status(500).json({message: err})
+                res.status(500).json({ message: err })
+            })
+    }
+    static addImage(req, res) {
+        Image
+            .find({
+                title: req.body.title
+            })
+            .then((data) => {
+                //if data is found: AKA title is already used
+                if (data.length !== 0) {
+                    res.status(400).json({ message: "Title has already been used" })
+                    //if data is not found : aka data is null and title is not already used
+                } else {
+                    let newImage = new Image({
+                        image: req.body.img,
+                        title: req.body.title,
+                        name: req.body.name
+                    })
+                    return newImage
+                        .save()
+                        .then((data) => {
+                            res.status(201).json({ message: "Image Added", data: data })
+                        })
+                }
+            })
+            .catch((err) => {
+                console.log(err)
+                res.status(500).json({ message: err })
             })
     }
     static searchImage(req, res) {
