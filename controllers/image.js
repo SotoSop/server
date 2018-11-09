@@ -11,7 +11,7 @@ class Controller {
                 res.status(500).json({message: err})
             })
     }
-    static addImage(req, res) {
+    static addImageNael(req, res) {
         Image  
             .find({
                 title: req.body.title
@@ -40,6 +40,7 @@ class Controller {
             })
     }
     static searchImage(req, res) {
+        console.log(req.query.search)
         Image
             .find({$or: [
                 {name:new RegExp(req.query.search, 'i')},
@@ -48,7 +49,7 @@ class Controller {
             .then((data) => {
                 //if not found . . .
                 if(data.length === 0) {
-                    res.status(400).json({message: "Image with that Title not found"})
+                    res.status(400).json({message: "Image with that search criteria not found"})
                 } else {
                     res.status(200).json({message: "Image Found", data: data})
                 }
